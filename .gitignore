@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+**/build/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# IDE files
+.idea/
+*.iml
+
+# Gradle Wrapper JAR (optional to ignore)
+gradle/wrapper/gradle-wrapper.jar
+
+# Log files
+*.log
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Kotlin/Java build output
+*.class
+
+# Caches
+.cxx/
+local.properties
+/captures
+.externalNativeBuild
+/local.properties
+
+
+
+
+
