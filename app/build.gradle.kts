@@ -55,9 +55,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-//    sourceSets.configureEach {
-//        java.srcDir("build/generated/ksp/${name}/kotlin")
-//    }
+
 }
 
 dependencies {
@@ -83,6 +81,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.coil.compose)
+    implementation(libs.image.picker)
 
 
     testImplementation(libs.junit)

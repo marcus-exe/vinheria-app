@@ -5,7 +5,8 @@ import br.com.vinheriaapp.data.model.Product
 
 enum class Mode{
     EDIT,
-    ADD
+    ADD,
+    VIEW
 }
 
 data class ProductState(

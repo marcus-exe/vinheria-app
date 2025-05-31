@@ -29,14 +29,46 @@ class ProductViewModel @Inject constructor(
             is ProductEvent.SetProductImageSrc -> setState { it.copy(productImgSrc = event.productImageSrc ) }
             is ProductEvent.SetProductPrice -> setState { it.copy(productPrice = event.productPrice) }
             is ProductEvent.SetProductStock -> setState { it.copy(productStock = event.productStock) }
-            ProductEvent.GoToEditImageScreen -> {
-                sendEffect(ProductEffect.GoToAddProduct)
+            is ProductEvent.GoToSingleImageScreen -> {
+                when (event.mode) {
+                    Mode.EDIT -> {
+                        if (event.product != null) {
+                            setState { it.copy(
+                                productName = event.product.name,
+                                productPrice = event.product.price.toString(),
+                                productStock = event.product.stock.toString(),
+                                productDescription = event.product.description,
+                                productImgSrc = event.product.imgSrc ?: "",
+                                mode = Mode.EDIT
+                            ) }
+                        }
+                    }
+                    Mode.ADD -> {
+                            setState { it.copy(mode = Mode.ADD) }
+                    }
+                    Mode.VIEW -> {
+                        if (event.product != null) {
+                            setState { it.copy(
+                                productName = event.product.name,
+                                productPrice = event.product.price.toString(),
+                                productStock = event.product.stock.toString(),
+                                productDescription = event.product.description,
+                                productImgSrc = event.product.imgSrc ?: "",
+                                mode = Mode.VIEW
+                            ) }
+                        }
+                    }
+                }
+                sendEffect(ProductEffect.GoToSingleProduct)
             }
             is ProductEvent.SaveProduct -> {
                 viewModelScope.launch {
                     productRepository.insertProduct(event.product)
                     sendEffect(ProductEffect.GoToListProduct)
                 }
+            }
+            is ProductEvent.SetMode -> {
+                setState { it.copy(mode = event.mode) }
             }
         }
     }

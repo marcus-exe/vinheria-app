@@ -1,6 +1,13 @@
 package br.com.vinheriaapp.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,13 +20,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import br.com.vinheriaapp.ui.screens.resources.AppBarComposable
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 
 @Composable
 fun NavGraph(
-    modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
     NavHost(
@@ -29,21 +36,51 @@ fun NavGraph(
         composable(NavGraphRoutes.ListProducts.route) {
             val viewModel: ProductViewModel = hiltViewModel()
             val state by viewModel.state.collectAsState()
-            ListProductsComposable(
-                productState = state,
-                effect = viewModel.effect,
-                onEvent = viewModel::onEvent,
-            ) { navController.navigate(NavGraphRoutes.SingleProduct.route) }
+
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    AppBarComposable("List Wines")
+                },
+                floatingActionButton = {
+                    FloatingActionButton(onClick = {
+                        navController.navigate(NavGraphRoutes.SingleProduct.route)
+                        viewModel.onEvent(ProductEvent.SetMode(Mode.ADD))
+                    }) {
+                        Icon(Icons.Default.Add, contentDescription = "Add")
+                    }
+                }
+            ) { innerPadding ->
+                ListProductsComposable(
+                    modifier = Modifier.padding(innerPadding),
+                    productState = state,
+                    effect = viewModel.effect,
+                    onEvent = viewModel::onEvent,
+                ) { navController.navigate(NavGraphRoutes.SingleProduct.route) }
+            }
         }
         composable(NavGraphRoutes.SingleProduct.route) {
             val parentRoute = NavGraphRoutes.ListProducts.route
             val viewModel: ProductViewModel = navController.sharedViewModel(parentRoute)
             val state by viewModel.state.collectAsState()
-            SingleProductComposable(
-                onEvent = viewModel::onEvent,
-                effect = viewModel.effect,
-                productState = state,
-            ) { navController.navigate(NavGraphRoutes.ListProducts.route) }
+
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    AppBarComposable(
+                        "Wines",
+                        true,
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
+            ) { innerPadding ->
+                SingleProductComposable(
+                    modifier = Modifier.padding(innerPadding),
+                    onEvent = viewModel::onEvent,
+                    effect = viewModel.effect,
+                    productState = state,
+                ) { navController.navigate(NavGraphRoutes.ListProducts.route) }
+            }
         }
     }
 }

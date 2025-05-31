@@ -1,5 +1,6 @@
 package br.com.vinheriaapp.ui.screens.resources
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -9,21 +10,31 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarComposable(){
+fun AppBarComposable(
+    title: String,
+    showBackButton: Boolean = false,
+    onBackClick: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {}
+) {
+
     TopAppBar(
-        title = { Text("Agnello App") },
+        title = { Text(text = title) },
         navigationIcon = {
-            IconButton(onClick = { /* handle navigation click */ }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            }
+            NavigationIcon(showBackButton = showBackButton, onBackClick)
         },
-        actions = {
-            IconButton(onClick = { /* handle action */ }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "More")
-            }
-        }
+        actions = actions
     )
+
+}
+@Composable
+fun NavigationIcon(showBackButton: Boolean, onBackClick: (() -> Unit)?){
+    if (showBackButton && onBackClick != null) {
+        IconButton(onClick = onBackClick) {
+            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+        }
+    } else null
 }

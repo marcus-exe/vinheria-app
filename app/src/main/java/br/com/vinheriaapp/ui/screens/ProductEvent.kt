@@ -18,9 +18,15 @@ sealed interface ProductEvent {
     data class SetProductImageSrc(
         val productImageSrc: String
     ) : ProductEvent
-    data object GoToEditImageScreen: ProductEvent
+    data class GoToSingleImageScreen(
+        val product: Product? = null,
+        val mode: Mode
+    ) : ProductEvent
     data class SaveProduct(
         val product: Product
+    ) : ProductEvent
+    data class SetMode(
+        val mode: Mode
     ) : ProductEvent
 
 }

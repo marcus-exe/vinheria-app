@@ -1,6 +1,5 @@
 package br.com.vinheriaapp.ui.screens.resources
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,9 +23,8 @@ fun ImageFromFileComposable(
             .crossfade(true)
             .build(),
         contentDescription = contentDescription,
-        contentScale = ContentScale.Crop,
+        contentScale = ContentScale.Fit,
         modifier = modifier
-            .fillMaxWidth()
             .height(200.dp)
     )
 }
