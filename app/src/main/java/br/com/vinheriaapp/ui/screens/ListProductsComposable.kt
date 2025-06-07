@@ -43,12 +43,6 @@ fun ListProductsComposable(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "There are no products registered yet :(")
-
-            Spacer(modifier = Modifier.padding(30.dp))
-
-            Button(onClick = { onEvent(ProductEvent.GoToSingleImageScreen(null, Mode.ADD)) }) {
-                Text(text = "Add Product")
-            }
         }
     } else {
         LazyVerticalGrid(

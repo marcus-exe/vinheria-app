@@ -34,6 +34,7 @@ class ProductViewModel @Inject constructor(
                     Mode.EDIT -> {
                         if (event.product != null) {
                             setState { it.copy(
+                                productId = event.product.id,
                                 productName = event.product.name,
                                 productPrice = event.product.price.toString(),
                                 productStock = event.product.stock.toString(),
@@ -49,6 +50,7 @@ class ProductViewModel @Inject constructor(
                     Mode.VIEW -> {
                         if (event.product != null) {
                             setState { it.copy(
+                                productId = event.product.id,
                                 productName = event.product.name,
                                 productPrice = event.product.price.toString(),
                                 productStock = event.product.stock.toString(),
@@ -62,13 +64,38 @@ class ProductViewModel @Inject constructor(
                 sendEffect(ProductEffect.GoToSingleProduct)
             }
             is ProductEvent.SaveProduct -> {
-                viewModelScope.launch {
-                    productRepository.insertProduct(event.product)
-                    sendEffect(ProductEffect.GoToListProduct)
+                if (state.value.mode == Mode.ADD) {
+                    viewModelScope.launch {
+                        productRepository.insertProduct(event.product)
+                        sendEffect(ProductEffect.GoToListProduct)
+                    }
                 }
+                if (state.value.mode == Mode.EDIT) {
+                    viewModelScope.launch {
+                        productRepository.updateProduct(event.product)
+                        sendEffect(ProductEffect.GoToListProduct)
+                    }
+                }
+
             }
             is ProductEvent.SetMode -> {
+                if (event.mode == Mode.ADD){
+                    setState { it.copy(
+                        productName = "",
+                        productPrice = "",
+                        productStock = "",
+                        productDescription = "",
+                        productImgSrc = ""
+                    )}
+                }
                 setState { it.copy(mode = event.mode) }
+            }
+
+            is ProductEvent.DeleteProduct -> {
+                viewModelScope.launch {
+                    productRepository.deleteProductById(event.productId)
+                    sendEffect(ProductEffect.GoToListProduct)
+                }
             }
         }
     }

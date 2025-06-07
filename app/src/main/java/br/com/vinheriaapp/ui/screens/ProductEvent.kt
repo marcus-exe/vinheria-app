@@ -1,6 +1,7 @@
 package br.com.vinheriaapp.ui.screens
 
 import br.com.vinheriaapp.data.model.Product
+import java.util.UUID
 
 sealed interface ProductEvent {
     data class SetProductName(
@@ -27,6 +28,9 @@ sealed interface ProductEvent {
     ) : ProductEvent
     data class SetMode(
         val mode: Mode
+    ) : ProductEvent
+    data class DeleteProduct (
+        val productId: UUID
     ) : ProductEvent
 
 }

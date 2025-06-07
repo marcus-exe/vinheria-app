@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import br.com.vinheriaapp.ui.screens.Mode
+import br.com.vinheriaapp.ui.screens.ProductEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +28,7 @@ fun AppBarComposable(
         navigationIcon = {
             NavigationIcon(showBackButton = showBackButton, onBackClick)
         },
-        actions = actions
+        actions = { actions() }
     )
 
 }

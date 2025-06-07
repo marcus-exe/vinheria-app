@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import br.com.vinheriaapp.ui.screens.resources.AppBarComposable
+import br.com.vinheriaapp.ui.screens.resources.ProductOverflowMenu
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
@@ -70,7 +71,15 @@ fun NavGraph(
                     AppBarComposable(
                         "Wines",
                         true,
-                        onBackClick = { navController.popBackStack() }
+                        onBackClick = { navController.popBackStack() },
+                        actions = {
+                            if (state.mode == Mode.VIEW) {
+                                ProductOverflowMenu(
+                                    state = state,
+                                    onEditClickEvent = viewModel::onEvent,
+                                    onDeleteClickEvent = viewModel::onEvent                              )
+                            }
+                        }
                     )
                 }
             ) { innerPadding ->

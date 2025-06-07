@@ -70,6 +70,7 @@ fun SingleProductComposable(
             onValueChange = { onEvent(ProductEvent.SetProductName(it.trim())) },
             placeholder = { Text(text = "Name") },
             singleLine = true,
+            readOnly = productState.mode == Mode.VIEW,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
@@ -80,6 +81,7 @@ fun SingleProductComposable(
             onValueChange = { onEvent(ProductEvent.SetProductPrice(it.trim())) },
             placeholder = { Text(text = "Price") },
             singleLine = true,
+            readOnly = productState.mode == Mode.VIEW,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .fillMaxWidth()
@@ -90,6 +92,7 @@ fun SingleProductComposable(
             onValueChange = { onEvent(ProductEvent.SetProductStock(it.trim())) },
             placeholder = { Text(text = "Stock") },
             singleLine = true,
+            readOnly = productState.mode == Mode.VIEW,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,6 +103,7 @@ fun SingleProductComposable(
             value = productState.productDescription,
             onValueChange = { onEvent(ProductEvent.SetProductDescription(it.trim())) },
             placeholder = { Text(text = "Description") },
+            readOnly = productState.mode == Mode.VIEW,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
@@ -137,7 +141,7 @@ private fun SaveButton(
                 onEvent(
                     ProductEvent.SaveProduct(
                         product = Product(
-                            id = UUID.randomUUID(),
+                            id = productState.productId ?: UUID.randomUUID(),
                             name = productState.productName,
                             price = BigDecimal(productState.productPrice),
                             stock = productState.productStock.toInt(),
@@ -146,6 +150,7 @@ private fun SaveButton(
                         )
                     )
                 )
+
             }
         },
         modifier = modifier
