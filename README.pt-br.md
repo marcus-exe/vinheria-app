@@ -1,6 +1,6 @@
 # 📱 Vinheria App - CRUD de Produtos
 
-🌐 Idiomas disponíveis: [English](README.md) | [Português](README.pt-BR.md)
+🌐 Idiomas disponíveis: [English](README.md) | [Português](README.pt-br.md)
 
 Um aplicativo Android para gerenciamento de produtos com suporte a imagens, construído utilizando **práticas modernas de desenvolvimento Android**, como **arquitetura MVI**, **Jetpack Compose**, **Hilt** e **Room (KSP)**.
 

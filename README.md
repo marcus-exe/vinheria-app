@@ -1,6 +1,6 @@
 # 📱 Vinheria App - Product CRUD
 
-🌐 Available languages: [English](README.md) | [Português](README.pt-BR.md)
+🌐 Available languages: [English](README.md) | [Português](README.pt-br.md)
 
 An Android CRUD application for product management with image support, built using **modern Android development practices** like **MVI architecture**, **Jetpack Compose**, **Hilt**, and **Room (KSP)**.
 
