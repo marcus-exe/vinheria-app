@@ -26,7 +26,9 @@ object AppModule {
         app,
         Database::class.java,
         "appDb",
-    ).build()
+    )
+        .createFromAsset("appDb.db")
+        .build()
 
     @Singleton
     @Provides

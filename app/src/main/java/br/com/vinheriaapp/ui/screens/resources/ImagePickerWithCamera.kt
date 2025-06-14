@@ -2,6 +2,7 @@ package br.com.vinheriaapp.ui.screens.resources
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -62,9 +63,12 @@ fun ImagePickerWithCamera(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
+            context.contentResolver.takePersistableUriPermission(
+                it,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
             imageUri = it
-            val path = getRealPathFromUri(context, it)
-            path?.let { value -> onEvent(ProductEvent.SetProductImageSrc(value)) }
+            onEvent(ProductEvent.SetProductImageSrc(it.toString()))
 
         }
     }
@@ -85,9 +89,14 @@ fun ImagePickerWithCamera(
     ) {
         Row {
 
-            (imageUri ?: imagePath)?.let { uriOrPath ->
+            val displayImagePath = imageUri?.toString() ?: imagePath?.let {
+                if (it.startsWith("file://") || it.startsWith("content://")) it
+                else "file:///android_asset/$it"
+            }
+
+            displayImagePath?.let { path ->
                 Image(
-                    painter = rememberAsyncImagePainter(uriOrPath),
+                    painter = rememberAsyncImagePainter(path),
                     contentDescription = null,
                     modifier = Modifier.size(150.dp),
                     contentScale = ContentScale.Crop
@@ -108,19 +117,5 @@ fun ImagePickerWithCamera(
             }
             Spacer(Modifier.weight(1f))
         }
-    }
-}
-
-fun getRealPathFromUri(context: Context, uri: Uri): String? {
-    return when (uri.scheme) {
-        ContentResolver.SCHEME_CONTENT -> {
-            val projection = arrayOf(MediaStore.Images.Media.DATA)
-            context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
-                val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                if (cursor.moveToFirst()) cursor.getString(columnIndex) else null
-            }
-        }
-        ContentResolver.SCHEME_FILE -> uri.path
-        else -> null
     }
 }

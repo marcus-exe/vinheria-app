@@ -72,7 +72,7 @@ fun SingleProductComposable(
 
         OutlinedTextField(
             value = productState.productName,
-            onValueChange = { onEvent(ProductEvent.SetProductName(it.trim())) },
+            onValueChange = { onEvent(ProductEvent.SetProductName(it)) },
             placeholder = { Text(text = "Name") },
             singleLine = true,
             readOnly = productState.mode == Mode.VIEW,
@@ -106,7 +106,7 @@ fun SingleProductComposable(
 
         OutlinedTextField(
             value = productState.productDescription,
-            onValueChange = { onEvent(ProductEvent.SetProductDescription(it.trim())) },
+            onValueChange = { onEvent(ProductEvent.SetProductDescription(it)) },
             placeholder = { Text(text = "Description") },
             readOnly = productState.mode == Mode.VIEW,
             modifier = Modifier
@@ -147,10 +147,10 @@ private fun SaveButton(
                     ProductEvent.SaveProduct(
                         product = Product(
                             id = productState.productId ?: UUID.randomUUID(),
-                            name = productState.productName,
+                            name = productState.productName.trim(),
                             price = BigDecimal(productState.productPrice),
                             stock = productState.productStock.toInt(),
-                            description = productState.productDescription,
+                            description = productState.productDescription.trim(),
                             imgSrc = productState.productImgSrc
                         )
                     )
