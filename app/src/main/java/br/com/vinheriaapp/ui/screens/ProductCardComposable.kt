@@ -34,6 +34,8 @@ fun ProductCardComposable(
             
             product.imgSrc?.let { ImageFromFileComposable(imagePath = it) }
             
+            Spacer(modifier = Modifier.padding(8.dp))
+            
             Text(
                 text = product.name,
                 style = MaterialTheme.typography.titleMedium.copy(fontSize = 20.sp),

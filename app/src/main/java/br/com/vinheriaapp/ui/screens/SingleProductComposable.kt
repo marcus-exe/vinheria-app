@@ -45,6 +45,7 @@ fun SingleProductComposable(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
+            .fillMaxWidth()
         ,
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -53,10 +54,14 @@ fun SingleProductComposable(
         Row (
             horizontalArrangement = Arrangement.Start
         ) {
-            if (productState.mode != Mode.VIEW) {
-                ImagePickerWithCamera(onEvent)
-            } else {
-                Row {
+            when (productState.mode) {
+                Mode.EDIT -> {
+                    ImagePickerWithCamera(productState.productImgSrc, onEvent)
+                }
+                Mode.ADD -> {
+                    ImagePickerWithCamera(null, onEvent)
+                }
+                Mode.VIEW -> {
                     ImageFromFileComposable(
                         imagePath = productState.productImgSrc
                     )

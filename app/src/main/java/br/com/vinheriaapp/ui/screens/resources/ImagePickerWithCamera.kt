@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -38,6 +40,7 @@ import java.io.File
 
 @Composable
 fun ImagePickerWithCamera(
+    imagePath: String? = null,
     onEvent: (ProductEvent) -> Unit
 ) {
     val context = LocalContext.current
@@ -76,32 +79,34 @@ fun ImagePickerWithCamera(
     }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.padding(bottom = 10.dp)
     ) {
         Row {
-            Button(onClick = { galleryLauncher.launch("image/*") }) {
-                Text("Pick from Gallery")
+
+            (imageUri ?: imagePath)?.let { uriOrPath ->
+                Image(
+                    painter = rememberAsyncImagePainter(uriOrPath),
+                    contentDescription = null,
+                    modifier = Modifier.size(150.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(Modifier.padding(10.dp))
             }
 
-            Spacer(Modifier.width(16.dp))
+            Column {
+                Button(onClick = { galleryLauncher.launch("image/*") }) {
+                    Text("Pick from Gallery")
+                }
 
-            Button(onClick = { cameraLauncher.launch(cameraImageUri) }) {
-                Text("Take Photo")
+                Spacer(Modifier.width(16.dp))
+
+                Button(onClick = { cameraLauncher.launch(cameraImageUri) }) {
+                    Text("Take Photo")
+                }
             }
-        }
-
-        Spacer(Modifier.height(24.dp))
-
-        imageUri?.let {
-            Image(
-                painter = rememberAsyncImagePainter(it),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(200.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .border(2.dp, Color.Gray)
-            )
+            Spacer(Modifier.weight(1f))
         }
     }
 }
