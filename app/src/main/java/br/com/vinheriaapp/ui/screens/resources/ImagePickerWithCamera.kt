@@ -47,13 +47,23 @@ fun ImagePickerWithCamera(
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Create camera image file and URI
+//    // Create camera image file and URI
+//    val imageFile = remember {
+//        File(context.cacheDir, "camera_image.jpg").apply {
+//            createNewFile()
+//            deleteOnExit()
+//        }
+//    }
+
+    // Create a persistent image file in app files dir (not cache)
     val imageFile = remember {
-        File(context.cacheDir, "camera_image.jpg").apply {
-            createNewFile()
-            deleteOnExit()
+        // Create a unique filename to avoid overwriting previous photos
+        val fileName = "camera_image_${System.currentTimeMillis()}.jpg"
+        File(context.filesDir, fileName).apply {
+            if (!exists()) createNewFile()
         }
     }
+
     val cameraImageUri = remember {
         FileProvider.getUriForFile(context, "${context.packageName}.provider", imageFile)
     }

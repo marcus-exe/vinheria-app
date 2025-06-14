@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import java.io.File
@@ -20,16 +21,19 @@ fun ImageFromFileComposable(
 ) {
     val context = LocalContext.current
 
-    val fullPath = remember(imagePath) {
+    val imageUri = remember(imagePath) {
         when {
-            imagePath.startsWith("file://") || imagePath.startsWith("content://") -> imagePath
-            else -> "file:///android_asset/$imagePath"
+            imagePath.startsWith("file://") || imagePath.startsWith("content://") -> Uri.parse(imagePath)
+            imagePath.startsWith("/") -> File(imagePath).toUri()
+            else -> null
         }
     }
 
+    val model = imageUri ?: "file:///android_asset/$imagePath"
+
     AsyncImage(
         model = ImageRequest.Builder(context)
-            .data(fullPath)
+            .data(model)
             .crossfade(true)
             .build(),
         contentDescription = contentDescription,
